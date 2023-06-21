@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, Fragment } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import "./course.css";
-import debug from "sabio-debug";
+import debug from "monefi-debug";
 import CourseCard from "../courses/CourseCard";
 import courseService from "../../services/courseService";
 import lookUpService from "services/lookUpService";
