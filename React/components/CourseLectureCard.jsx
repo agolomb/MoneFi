@@ -5,7 +5,7 @@ import { Card, Col, ListGroup, Row } from "react-bootstrap";
 import Icon from "@mdi/react";
 import { mdiBookOpenPageVariant, mdiClockOutline } from "@mdi/js";
 import courseImageDefault from "../../assets/images/placeholder/4by3.jpg";
-import debug from "sabio-debug";
+import debug from "monefi-debug";
 const _logger = debug.extend("CourseLectureCard");
 
 const CourseLectureCard = ({ oneLecture }) => {
