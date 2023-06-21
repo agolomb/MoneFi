@@ -1,6 +1,6 @@
 import axios from "axios";
 import * as helper from "../services/serviceHelpers";
-import debug from "sabio-debug";
+import debug from "monefi-debug";
 const _logger = debug.extend("courseService");
 let { REACT_APP_API_HOST_PREFIX: API } = process.env;
 _logger(API);
