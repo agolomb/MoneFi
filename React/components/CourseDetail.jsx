@@ -3,7 +3,7 @@ import { useLocation } from "react-router";
 import { useNavigate } from "react-router-dom";
 import PropTypes from "prop-types";
 import toastr from "toastr";
-import debug from "sabio-debug";
+import debug from "monefi-debug";
 import { Card, Col, Row, Image, ListGroup, Breadcrumb } from "react-bootstrap";
 import courseService from "../../services/courseService";
 import Ratings from "components/ratings/Ratings";
