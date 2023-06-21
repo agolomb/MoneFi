@@ -1,7 +1,7 @@
 import React from "react";
 import "./course.css";
 import PropTypes from "prop-types";
-import debug from "sabio-debug";
+import debug from "monefi-debug";
 import { Image, Card, Col, Row } from "react-bootstrap";
 import Icon from "@mdi/react";
 import {
