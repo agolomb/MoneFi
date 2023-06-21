@@ -1,9 +1,9 @@
-﻿using Sabio.Data;
-using Sabio.Data.Providers;
-using Sabio.Models;
-using Sabio.Models.Domain;
-using Sabio.Models.Requests;
-using Sabio.Services.Interfaces;
+﻿using MoneFi.Data;
+using MoneFi.Data.Providers;
+using MoneFi.Models;
+using MoneFi.Models.Domain;
+using MoneFi.Models.Requests;
+using MoneFi.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -12,23 +12,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sabio.Services
+namespace MoneFi.Services
 {
-    public class CourseService : ICourseService
+    public class ItemService : IItemService
     {
         IDataProvider _data = null;
         ILookUpService _lookUpService = null;
         IBaseUserMapper _userMapper = null;
 
-        public CourseService(IDataProvider data, ILookUpService lookUpService, IBaseUserMapper baseUserMapper)
+        public ItemService(IDataProvider data, ILookUpService lookUpService, IBaseUserMapper baseUserMapper)
         {
             _data = data;
             _lookUpService = lookUpService;
             _userMapper = baseUserMapper;
         }
-        public Course Get(int id)
+        public Item Get(int id)
         {
-            string procName = "[dbo].[Courses_SelectById]";
+            string procName = "[dbo].[Items_SelectById]";
             Course course = null;
             _data.ExecuteCmd(procName, delegate (SqlParameterCollection paramCollection)
             {
@@ -37,36 +37,36 @@ namespace Sabio.Services
             , delegate (IDataReader reader, short set)
             {
                 int startingIndex = 0;
-                course = MapSingleCourse(reader, ref startingIndex);
+                course = MapSingleItem(reader, ref startingIndex);
             }
             );
             return course;
         }
-        public List<CourseSubject> GetSubjects()
+        public List<ItemSubject> GetSubjects()
         {
            
-            List<CourseSubject> subjects = null;
-            string procName = "[dbo].[Courses_Select_Unique_Subjects]";
+            List<ItemSubject> subjects = null;
+            string procName = "[dbo].[Items_Select_Unique_Subjects]";
             _data.ExecuteCmd(procName, inputParamMapper: null,
                 singleRecordMapper: delegate (IDataReader reader, short set)
                 {
                     int startingIndex = 0;
-                    CourseSubject aSubject = MapSingleCourseSubject(reader, ref startingIndex);
+                    ItemSubject aSubject = MapSingleItemSubject(reader, ref startingIndex);
                     if (subjects == null)
                     {
-                        subjects = new List<CourseSubject>();
+                        subjects = new List<ItemSubject>();
                     }
                     subjects.Add(aSubject);
                 });
             return subjects;
         }
-        public Paged<Course> GetCreatedByPaginated(int id, int pageIndex, int pageSize)
+        public Paged<Item> GetCreatedByPaginated(int id, int pageIndex, int pageSize)
         {
-            Paged<Course> pagedResult = null;
-            List<Course> coursesCreatedByPaginated = null;
+            Paged<Item> pagedResult = null;
+            List<Item> itemsCreatedByPaginated = null;
             int totalCount = 0;
 
-            _data.ExecuteCmd("[dbo].[Courses_Select_ByCreatedBy]",
+            _data.ExecuteCmd("[dbo].[Items_Select_ByCreatedBy]",
                 (param) =>
                 {
                     param.AddWithValue("@Id", id);
@@ -76,66 +76,66 @@ namespace Sabio.Services
                 (reader, recordSetIndex) =>
                 {
                     int startingIndex = 0;
-                    Course course = MapSingleCourse(reader, ref startingIndex);
+                    Item item = MapSingleItem(reader, ref startingIndex);
                     if(totalCount == 0)
                     {
                         totalCount = reader.GetSafeInt32(startingIndex);
                     }                   
-                    if (coursesCreatedByPaginated == null)
+                    if (itemsCreatedByPaginated == null)
                     {
-                        coursesCreatedByPaginated = new List<Course>();
+                        itemsCreatedByPaginated = new List<Item>();
                     }
-                    coursesCreatedByPaginated.Add(course);
+                    itemsCreatedByPaginated.Add(item);
                 }
                 );
-            if (coursesCreatedByPaginated != null)
+            if (itemsCreatedByPaginated != null)
             {
-                pagedResult = new Paged<Course>(coursesCreatedByPaginated, pageIndex, pageSize, totalCount);
+                pagedResult = new Paged<Item>(itemsCreatedByPaginated, pageIndex, pageSize, totalCount);
             }
             return pagedResult;
         }
-        public Paged<Course> SearchPagination(int pageIndex, int pageSize, string query, int? lectureTypeId)
+        public Paged<Item> SearchPagination(int pageIndex, int pageSize, string query, int? lectureTypeId)
         {
-            Paged<Course> pagedResult = null;
-            List<Course> coursesSearchPaginated = null;
+            Paged<Item> pagedResult = null;
+            List<Item> itemsSearchPaginated = null;
             int totalCount = 0;
 
-            _data.ExecuteCmd("[dbo].[Courses_SearchV2]",
+            _data.ExecuteCmd("[dbo].[Items_SearchV2]",
                 (param) =>
                 {
                     param.AddWithValue("@PageIndex", pageIndex);
                     param.AddWithValue("@PageSize", pageSize);
                     param.AddWithValue("@Query", query);
-                    param.AddWithValue("@LectureTypeId", lectureTypeId);
+                    param.AddWithValue("@LookUpTypeId", lookUpTypeId);
                 },
                 (reader, recordSetIndex) =>
                 {
                     int startingIndex = 0;
-                    Course course = MapSingleCourse(reader, ref startingIndex);                 
+                    Item item = MapSingleItem(reader, ref startingIndex);                 
                     if(totalCount == 0)
                     {
                         totalCount = reader.GetSafeInt32(startingIndex);
                     }
-                    if (coursesSearchPaginated == null)
+                    if (itemsSearchPaginated == null)
                     {
-                        coursesSearchPaginated = new List<Course>();
+                        itemsSearchPaginated = new List<Course>();
                     }
-                    coursesSearchPaginated.Add(course);
+                    itemsSearchPaginated.Add(course);
                 }
                 );
-            if(coursesSearchPaginated != null) 
+            if(itemsSearchPaginated != null) 
             { 
-                pagedResult = new Paged<Course>(coursesSearchPaginated, pageIndex, pageSize, totalCount);
+                pagedResult = new Paged<Item>(itemsSearchPaginated, pageIndex, pageSize, totalCount);
             }
             return pagedResult;
         }
-        public Paged<Course> GetPaginated(int pageIndex, int pageSize) 
+        public Paged<Item> GetPaginated(int pageIndex, int pageSize) 
         {
-            Paged<Course> pagedList = null;
-            List<Course> coursesPaginated = null;
+            Paged<Item> pagedList = null;
+            List<Item> itemsPaginated = null;
             int totalCount = 0;
 
-            _data.ExecuteCmd("[dbo].[Courses_SelectAll]",
+            _data.ExecuteCmd("[dbo].[Items_SelectAll]",
                 (param) =>
                 {
                     param.AddWithValue("@PageIndex", pageIndex);
@@ -144,24 +144,24 @@ namespace Sabio.Services
                 (reader, recordSetIndex) =>
                 {
                     int startingIndex = 0;
-                    Course course = MapSingleCourse(reader, ref startingIndex);
+                    Course course = MapSingleItem(reader, ref startingIndex);
                     if (coursesPaginated == null)
                     {
-                        coursesPaginated = new List<Course>();
+                        itemsPaginated = new List<Item>();
                     }
-                    coursesPaginated.Add(course);
+                    itemsPaginated.Add(item);
                 }
                 );
-            if (coursesPaginated != null)
+            if (itemsPaginated != null)
             {
-                pagedList = new Paged<Course> (coursesPaginated, pageIndex, pageSize, totalCount);
+                pagedList = new Paged<Item> (itemsPaginated, pageIndex, pageSize, totalCount);
             }
             return pagedList;
         }
-        public int Add(CourseAddRequest model, int userId)
+        public int Add(ItemAddRequest model, int userId)
         {
             int id = 0;
-            string procName = "[dbo].[Courses_Insert]";
+            string procName = "[dbo].[Items_Insert]";
             _data.ExecuteNonQuery(procName,
                 inputParamMapper: delegate (SqlParameterCollection collection)
                 {
@@ -178,48 +178,48 @@ namespace Sabio.Services
                 });
             return id;
         }
-        public void Update(CourseUpdateRequest model, int userId)
+        public void Update(ItemUpdateRequest model, int userId)
         {
-            string procName = "[dbo].[Courses_Update]";
+            string procName = "[dbo].[Items_Update]";
             _data.ExecuteNonQuery(procName,
                 inputParamMapper: delegate (SqlParameterCollection collection)
                 {
                     AddCommonParams(model, collection);
                     collection.AddWithValue("@Id", model.Id);
                     collection.AddWithValue("@StatusId", model.StatusId);
-                    collection.AddWithValue("@ModifiedBy", userId);//changed from "model.Id" to "userId"
+                    collection.AddWithValue("@ModifiedBy", userId);
                 },
                 returnParameters: null);
         }       
-        private Course MapSingleCourse(IDataReader reader, ref int startingIndex)
+        private Item MapSingleItem(IDataReader reader, ref int startingIndex)
         {
-            Course aCourse = new Course();
+            Item aItem = new Item();
             
-            aCourse.Id = reader.GetSafeInt32(startingIndex++);
-            aCourse.Title = reader.GetSafeString(startingIndex++);
-            aCourse.Subject = reader.GetSafeString(startingIndex++);
-            aCourse.Description = reader.GetSafeString(startingIndex++);
-            aCourse.Instructor = _userMapper.MapBaseUser(reader, ref startingIndex);
-            aCourse.Duration = reader.GetSafeString(startingIndex++);
-            aCourse.LectureType = _lookUpService.MapSingleLookUp(reader, ref startingIndex);
-            aCourse.CoverImageUrl = reader.GetSafeString(startingIndex++);
-            aCourse.StatusName = _lookUpService.MapSingleLookUp(reader, ref startingIndex);
-            aCourse.DateCreated = reader.GetSafeDateTime(startingIndex++);
-            aCourse.DateModified = reader.GetSafeDateTime(startingIndex++);
-            aCourse.CreatedBy = _userMapper.MapBaseUser(reader, ref startingIndex);
-            aCourse.ModifiedBy = reader.GetSafeInt32(startingIndex++);
+            aItem.Id = reader.GetSafeInt32(startingIndex++);
+            aItem.Title = reader.GetSafeString(startingIndex++);
+            aItem.Subject = reader.GetSafeString(startingIndex++);
+            aItem.Description = reader.GetSafeString(startingIndex++);
+            aItem.Instructor = _userMapper.MapBaseUser(reader, ref startingIndex);
+            aItem.Duration = reader.GetSafeString(startingIndex++);
+            aItem.LectureType = _lookUpService.MapSingleLookUp(reader, ref startingIndex);
+            aItem.CoverImageUrl = reader.GetSafeString(startingIndex++);
+            aItem.StatusName = _lookUpService.MapSingleLookUp(reader, ref startingIndex);
+            aItem.DateCreated = reader.GetSafeDateTime(startingIndex++);
+            aItem.DateModified = reader.GetSafeDateTime(startingIndex++);
+            aItem.CreatedBy = _userMapper.MapBaseUser(reader, ref startingIndex);
+            aItem.ModifiedBy = reader.GetSafeInt32(startingIndex++);
         
-            return aCourse;
+            return aItem;
         }
 
-        private CourseSubject MapSingleCourseSubject(IDataReader reader, ref int startingIndex)
+        private ItemSubject MapSingleItemSubject(IDataReader reader, ref int startingIndex)
         {
-            CourseSubject aSubject = new CourseSubject();
+            ItemSubject aSubject = new ItemSubject();
             aSubject.Subject = reader.GetSafeString(startingIndex++);
             return aSubject;
         }
 
-        private static void AddCommonParams(CourseAddRequest model, SqlParameterCollection collection)
+        private static void AddCommonParams(ItemAddRequest model, SqlParameterCollection collection)
         {
             collection.AddWithValue("@Title", model.Title);
             collection.AddWithValue("@Subject", model.Subject);
