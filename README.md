@@ -23,3 +23,5 @@ I was responsible for building the education hub through the full stack. I desig
 ● Utilized Git and GitHub for proper source control in conjunction with other software engineers
 
 ● Conducted daily stand-up meetings and Agile methodologies with sprints, code reviews, and code talks
+
+*Please note that MoneFi is currently a Minimal Viable Product and due to proprietary restrictions, I can only provide code snippets in this repository.
