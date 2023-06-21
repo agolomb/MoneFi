@@ -8,7 +8,7 @@ import "./course.css";
 import toastr from "toastr";
 import courseImageDefault from "../../assets/images/placeholder/MoneFiLogoDefault.png";
 import avatarDefault from "../../assets/images/avatar/defaultavatar.jpg";
-import debug from "sabio-debug";
+import debug from "monefi-debug";
 import courseAddSchema from "schemas/courseAddSchema";
 import Icon from "@mdi/react";
 import {
