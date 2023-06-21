@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Sabio.Models.Domain
+namespace MoneFi.Models.Domain
 {
-    public class CourseSubject
+    public class ItemSubject
     {
         public string Subject { get; set; }   
     }
