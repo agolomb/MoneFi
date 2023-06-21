@@ -57,6 +57,7 @@ namespace MoneFi.Web.Api.Controllers
             }
             return StatusCode(iCode, response);
         }
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult<ItemsResponse<ItemSubject>> GetSubjects() {
             int iCode = 200;
@@ -138,7 +139,7 @@ namespace MoneFi.Web.Api.Controllers
             }
             return result;
         }
-
+        [AllowAnonymous]
         [HttpGet("search")]
         public ActionResult<ItemResponse<Paged<Course>>> SearchPagination(int pageIndex, int pageSize, string query, int? lectureTypeId)
         {
