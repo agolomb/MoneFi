@@ -1,28 +1,28 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Sabio.Services;
-using Sabio.Services.Interfaces;
-using Sabio.Web.Controllers;
-using Sabio.Web.Models.Responses;
+using MoneFi.Services;
+using MoneFi.Services.Interfaces;
+using MoneFi.Web.Controllers;
+using MoneFi.Web.Models.Responses;
 using System.Data.SqlClient;
 using System;
-using Sabio.Models;
+using MoneFi.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Sabio.Models.Domain;
-using Sabio.Models.Requests;
+using MoneFi.Models.Domain;
+using MoneFi.Models.Requests;
 using System.Collections.Generic;
 
-namespace Sabio.Web.Api.Controllers
+namespace MoneFi.Web.Api.Controllers
 {
-    [Route("api/courses")]
+    [Route("api/items")]
     [ApiController]
-    public class CourseApiController : BaseApiController
+    public class ItemApiController : BaseApiController
     {
-        private ICourseService _service = null;
+        private IItemService _service = null;
         private IAuthenticationService<int> _authService = null;
-        public CourseApiController(ICourseService service,
-        ILogger<CourseApiController> logger,
+        public ItemApiController(IItemService service,
+        ILogger<ItemApiController> logger,
         IAuthenticationService<int> authService) : base(logger)
         {
             _service = service;
@@ -30,14 +30,14 @@ namespace Sabio.Web.Api.Controllers
         }
         
         [HttpGet("{id:int}")]
-        public ActionResult<ItemResponse<Course>> Get(int id) 
+        public ActionResult<ItemResponse<Item>> Get(int id) 
         {
             int iCode = 200;
             BaseResponse response = null;
 
             try
             {
-                Course course = _service.Get(id);
+                Item item = _service.Get(id);
 
                 if(course==null)
                 {
@@ -58,13 +58,13 @@ namespace Sabio.Web.Api.Controllers
             return StatusCode(iCode, response);
         }
         [HttpGet]
-        public ActionResult<ItemsResponse<CourseSubject>> GetSubjects() {
+        public ActionResult<ItemsResponse<ItemSubject>> GetSubjects() {
             int iCode = 200;
             BaseResponse response = null;
 
             try 
             {
-                List<CourseSubject> list = _service.GetSubjects();
+                List<ItemSubject> list = _service.GetSubjects();
 
                 if(list == null)
                 {
@@ -74,7 +74,7 @@ namespace Sabio.Web.Api.Controllers
                 else
                 {
                     iCode = 200;
-                    response = new ItemsResponse<CourseSubject> { Items = list };
+                    response = new ItemsResponse<ItemSubject> { Items = list };
                 }
             }
             catch (Exception ex) 
@@ -88,19 +88,19 @@ namespace Sabio.Web.Api.Controllers
         }
 
         [HttpGet("createdby/{id:int}")]
-        public ActionResult<ItemResponse<Paged<Course>>> GetCreatedByPaginated(int id, int pageIndex, int pageSize)
+        public ActionResult<ItemResponse<Paged<Item>>> GetCreatedByPaginated(int id, int pageIndex, int pageSize)
         {
             ActionResult result = null;
             try
             {
-                Paged<Course> paged = _service.GetCreatedByPaginated(id, pageIndex, pageSize);
+                Paged<Item> paged = _service.GetCreatedByPaginated(id, pageIndex, pageSize);
                 if (paged == null)
                 {
                     result = NotFound404(new ErrorResponse("Records Not Found"));
                 }
                 else
                 {
-                    ItemResponse<Paged<Course>> response = new ItemResponse<Paged<Course>>();
+                    ItemResponse<Paged<Item>> response = new ItemResponse<Paged<Item>>();
                     response.Item = paged;
                     result = Ok200(response);
                 }
@@ -114,19 +114,19 @@ namespace Sabio.Web.Api.Controllers
         }
 
         [HttpGet("paginate")]
-        public ActionResult<ItemResponse<Paged<Course>>> GetPaginated(int pageIndex, int pageSize)
+        public ActionResult<ItemResponse<Paged<Item>>> GetPaginated(int pageIndex, int pageSize)
         {
             ActionResult result = null;
             try
             {
-                Paged<Course> paged = _service.GetPaginated(pageIndex, pageSize);
+                Paged<Item> paged = _service.GetPaginated(pageIndex, pageSize);
                 if(paged == null)
                 {
                     result = NotFound404(new ErrorResponse("Records Not Found"));
                 }
                 else
                 {
-                    ItemResponse<Paged<Course>> response = new ItemResponse<Paged<Course>>();
+                    ItemResponse<Paged<Item>> response = new ItemResponse<Paged<Item>>();
                     response.Item = paged;
                     result = Ok200(response);
                 }
@@ -150,15 +150,15 @@ namespace Sabio.Web.Api.Controllers
             BaseResponse response = null;
             try
             {
-                Paged<Course> page = _service.SearchPagination(pageIndex, pageSize, query, lectureTypeId);
+                Paged<Item> page = _service.SearchPagination(pageIndex, pageSize, query, lectureTypeId);
                 if (page == null)
                 {
                     code = 404;
-                    response = new ItemResponse<Paged<Course>> { Item = page };
+                    response = new ItemResponse<Paged<Item>> { Item = page };
                 }
                 else
                 {
-                    response = new ItemResponse<Paged<Course>> { Item = page };
+                    response = new ItemResponse<Paged<Item>> { Item = page };
                 }
             }
             catch (Exception ex)
@@ -171,15 +171,15 @@ namespace Sabio.Web.Api.Controllers
         }
 
         [HttpPost]
-        public ActionResult<ItemResponse<int>> Create(CourseAddRequest model)
+        public ActionResult<ItemResponse<int>> Create(ItemAddRequest model)
         {
             ObjectResult result = null;
             try
             {
                 int userId = _authService.GetCurrentUserId();
-                int newCourseId = _service.Add(model, userId);
+                int newItemId = _service.Add(model, userId);
 
-                ItemResponse<int> response = new ItemResponse<int>() { Item = newCourseId };
+                ItemResponse<int> response = new ItemResponse<int>() { Item = newItemId };
                 result = Created201(response);
             }
             catch (Exception ex)
@@ -191,7 +191,7 @@ namespace Sabio.Web.Api.Controllers
             return result;
         }
         [HttpPut("{id:int}")]
-        public ActionResult<SuccessResponse> Update(CourseUpdateRequest model)
+        public ActionResult<SuccessResponse> Update(ItemUpdateRequest model)
         {
             int code = 200;
             BaseResponse response = null;
