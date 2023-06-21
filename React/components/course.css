@@ -1,0 +1,113 @@
+.formSearchCourses {
+  height: 45px;
+  width: 280px;
+}
+.lectureTypeDropdown {
+  width: 183px;
+  margin-left: 5px;
+  cursor: pointer;
+}
+.courseInfoButton {
+  color: blueviolet;
+  cursor: pointer;
+}
+.courseSearchReset {
+  color: blueviolet;
+  cursor: pointer;
+}
+.lectureOptions {
+  color: black;
+}
+.cardGridView {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.cardCourseImage {
+  min-height: 220px;
+  max-height: 220px;
+}
+.courseCardDetailBody {
+  margin: auto;
+}
+.courseDetailCourseImage {
+  max-height: 402px;
+}
+.courseCardDetail {
+  padding-bottom: 12px;
+  padding-top: 26px;
+}
+.courseEditIcon {
+  margin-left: 77px;
+}
+.courseLectureCards {
+  display: flex;
+  justify-content: space-around;
+}
+.courseLectureCardRow {
+  border-radius: 1%;
+}
+.courseLectureCardBody {
+  min-height: 388px;
+  max-height: 388px;
+}
+.courseLectureCardParent {
+  min-width: 260px;
+  max-width: 260px;
+}
+.courseLectureCardFooter {
+  padding-top: 8px;
+  padding-bottom: 3px;
+  padding-left: 4px;
+  padding-right: 4px;
+}
+.icons-group {
+  padding: 50%;
+}
+.cardListText {
+  min-height: 508px;
+  max-height: 508px;
+}
+.courseSubjectBadge {
+  font-weight: bold;
+  position: absolute;
+  right: 7px;
+  top: 10px;
+  background: #c94274;
+  text-align: center;
+  border-radius: 30px 30px 30px 30px;
+  color: black;
+  padding: 5px 10px;
+  font-size: 15px;
+}
+.courseDetailBodyBadge {
+  font-weight: bold;
+  position: absolute;
+  left: 248px;
+  top: 10px;
+  background: #c94274;
+  text-align: center;
+  border-radius: 30px 30px 30px 30px;
+  color: black;
+  padding: 5px 10px;
+  font-size: 15px;
+  width: auto;
+}
+.courseEditSubmitButton {
+  width: 100px;
+  margin: auto;
+}
+.courseEditFormikErrors {
+  color: red;
+}
+.ratings-container {
+  width: 200px;
+  align-items: left;
+}
+
+.ratings-container p {
+  margin-top: -3vh;
+  font-size: 1.4vh;
+  color: gray;
+  text-align: center;
+}
+
