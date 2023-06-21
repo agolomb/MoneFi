@@ -1,1 +1,5 @@
 # MoneFi
+
+MoneFi is a fintech organization that is deeply committed to creating a reality where financial services are accessible to all underserved entrepreneurs. MoneFi's mission is to equip them with the necessary resources and education to significantly amplify their businesses, fostering positive community change. Our mission is to equip them with the necessary resources and education to significantly amplify their businesses, fostering positive community change. MoneFi is also innovating in cross-border payment partnerships that have the potential to transform the traditional payments landscape by facilitating seamless transfers of small and medium-sized amounts between platforms.
+
+I was responsible for building the education hub through the full stack. I designed the tables and stored procedures for data management in Microsoft SQL Server. I also built the API endpoints, models, and methods that facilitate all of the HTTP requests and responses. I created and tested the frontend of the education hub that allows users to view all of the education resources offered by MoneFi and this platform allows administrators to manage the data in real time.
